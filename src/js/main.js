@@ -30,7 +30,8 @@ inputField.addEventListener('input', function() {
   if(this.value === '') {
     return outputField.value = '';
   }
-  const countryNames = this.value.split('\n').map(code => {
+  const countryNames = this.value.trim().split('\n').map(item => {
+    const code = item.trim()
     let country
     if(code.length === 3) {
       country = Country.findByIso3(code.toUpperCase())
@@ -38,13 +39,12 @@ inputField.addEventListener('input', function() {
     if(code.length === 2) {
       country = Country.findByIso2(code.toUpperCase())
     }
-    if(code === '') {
-      return `Empty space is not a valid iso2 or iso3 country code`;
-    }
-    if(country === undefined) {
+    if(country === undefined && code !== '') {
       return `${code} is not a valid iso2 or iso3 country code`;
     }
-    return country.name
+    if (code !== '') {
+      return country.name
+    }
   })
   const uniqueCountry = [...new Set(countryNames)].map(name => {
     const count = countryNames.filter(country => country === name).length
