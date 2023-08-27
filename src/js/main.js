@@ -61,5 +61,7 @@ inputField.addEventListener('input', function() {
   outputField.value = uniqueCountry;
   if(invalidCodes.length > 0) {
     errorField.innerHTML = `${invalidCodes.join(', ')}  is not valid iso2 or iso3 country code`;
+  } else {
+    errorField.innerHTML = '';
   }
 })
