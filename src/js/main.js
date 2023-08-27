@@ -18,6 +18,7 @@ App.innerHTML = `
       <div class="flex-1">
         <h2 class="text-2xl mb-3">Output</h2>
         <textarea id="output_field" class=" border border-gray-300 resize-none w-full h-80 px-5 py-4" placeholder="Country name output."></textarea>
+        <p id="error_field" class="text-red-500"></p>
       </div>
     </div>
   </div>
@@ -25,8 +26,10 @@ App.innerHTML = `
 
 const inputField = App.querySelector('#input_field');
 const outputField = App.querySelector('#output_field');
+const errorField = App.querySelector('#error_field');
 
 inputField.addEventListener('input', function() {
+  let invalidCodes = [];
   if(this.value === '') {
     return outputField.value = '';
   }
@@ -40,13 +43,15 @@ inputField.addEventListener('input', function() {
       country = Country.findByIso2(code.toUpperCase())
     }
     if(country === undefined && code !== '') {
-      return `${code} is not a valid iso2 or iso3 country code`;
+      invalidCodes.push(code);
+      // return `${code} is not a valid iso2 or iso3 country code`;
     }
-    if (code !== '') {
+    if (country !== undefined && code !== '') {
       return country.name
     }
+    return false;
   })
-  const uniqueCountry = [...new Set(countryNames)].map(name => {
+  const uniqueCountry = [...new Set(countryNames)].filter(name => name !== false).map(name => {
     const count = countryNames.filter(country => country === name).length
     if(count > 1) {
       return `${name} (${count})`
@@ -54,4 +59,7 @@ inputField.addEventListener('input', function() {
     return name
   }).join('\n');
   outputField.value = uniqueCountry;
+  if(invalidCodes.length > 0) {
+    errorField.innerHTML = `${invalidCodes.join(', ')}  is not valid iso2 or iso3 country code`;
+  }
 })
