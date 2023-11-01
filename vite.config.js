@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import imagemin from 'unplugin-imagemin/vite';
 
 export default defineConfig(({ command, mode }) => ({
     base: '',
@@ -11,4 +12,7 @@ export default defineConfig(({ command, mode }) => ({
             module: './src/css/style.css',
         },
     },
+    plugins: [
+        imagemin()
+    ]
 }));
